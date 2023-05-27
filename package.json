@@ -2,11 +2,11 @@
   "name": "social network back-end",
   "version": "1.0.1",
   "description": "mongo based api for social network",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index",
+    "start": "node server",
+    "dev": "nodemon server",
     "seed": "node utils/seed"
   },
   "dependencies": {

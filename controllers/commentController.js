@@ -3,15 +3,16 @@ const { Comment, User } = require('../models');
 module.exports = {
   async getComment(req, res) {
     try {
-      const comment = await Comment.find();
-      res.json(comment);
+      const comments = await Comment.find();
+      res.json(comments);
     } catch (err) {
       res.status(500).json(err);
     }
   },
+
   async getSingleComment(req, res) {
     try {
-      const comment = await Comment.findOne({ _id: req.params.commentId })
+      const comment = await Comment.findOne({ _id: req.params.commentId });
 
       if (!comment) {
         return res.status(404).json({ message: 'No comment with that ID' });
@@ -22,7 +23,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // create a new comment
+
   async createComment(req, res) {
     try {
       const comment = await Comment.create(req.body);
@@ -34,7 +35,7 @@ module.exports = {
 
       if (!user) {
         return res.status(404).json({
-          message: 'Comment created, but found no user with that ID',
+          message: 'Comment created, but no user found with that ID',
         });
       }
 
@@ -44,6 +45,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
   async updateComment(req, res) {
     try {
       const comment = await Comment.findOneAndUpdate(
@@ -53,7 +55,7 @@ module.exports = {
       );
 
       if (!comment) {
-        return res.status(404).json({ message: 'No comment with this id!' });
+        return res.status(404).json({ message: 'No comment with this ID' });
       }
 
       res.json(comment);
@@ -62,12 +64,13 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
   async deleteComment(req, res) {
     try {
       const comment = await Comment.findOneAndRemove({ _id: req.params.commentId });
 
       if (!comment) {
-        return res.status(404).json({ message: 'No comment with this id!' });
+        return res.status(404).json({ message: 'No comment with this ID' });
       }
 
       const user = await User.findOneAndUpdate(
@@ -79,7 +82,7 @@ module.exports = {
       if (!user) {
         return res
           .status(404)
-          .json({ message: 'Comment created but no user with this id!' });
+          .json({ message: 'Comment deleted, but no user found with that ID' });
       }
 
       res.json({ message: 'Comment successfully deleted!' });
@@ -87,7 +90,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Add a comment response
+
   async addCommentResponse(req, res) {
     try {
       const comment = await Comment.findOneAndUpdate(
@@ -97,7 +100,7 @@ module.exports = {
       );
 
       if (!comment) {
-        return res.status(404).json({ message: 'No comment with this id!' });
+        return res.status(404).json({ message: 'No comment with this ID' });
       }
 
       res.json(comment);
@@ -105,22 +108,14 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Remove comment response
+
   async removeCommentResponse(req, res) {
     try {
       const comment = await Comment.findOneAndUpdate(
         { _id: req.params.commentId },
-        { $pull: { reactions: { responseId: req.params.responseId } } },
+        { $pull: { responses: { responseId: req.params.responseId } } },
         { runValidators: true, new: true }
-      )
+      );
 
       if (!comment) {
-        return res.status(404).json({ message: 'No comment with this id!' });
-      }
-
-      res.json(comment);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  },
-};
+        return res.status(404).json({ message: 'No comment with this ID' });

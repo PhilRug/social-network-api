@@ -1,6 +1,6 @@
 const { Schema, Types } = require('mongoose');
 
-const commentSchema = new Schema(
+const CommentSchema = new Schema(
   {
     reactionId: {
       type: Schema.Types.ObjectId,
@@ -28,4 +28,4 @@ const commentSchema = new Schema(
   }
 );
 
-module.exports = commentSchema;
+module.exports = CommentSchema;

@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 // Schema to create User model
-const userSchema = new Schema(
+const UserSchema = new Schema(
   {
     first: String,
     last: String,
@@ -24,7 +24,7 @@ const userSchema = new Schema(
 );
 
 // Create a virtual property `fullName` that gets and sets the user's full name
-userSchema
+UserSchema
   .virtual('fullName')
   // Getter
   .get(function () {
@@ -38,6 +38,6 @@ userSchema
   });
 
 // Initialize our User model
-const User = model('user', userSchema);
+const User = model('user', UserSchema);
 
 module.exports = User;
