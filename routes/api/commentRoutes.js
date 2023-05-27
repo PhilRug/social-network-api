@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-  getComments,
+  getComment,
   getSingleComment,
   createComment,
   updateComment,
@@ -10,7 +10,7 @@ const {
 } = require('../../controllers/commentController');
 
 // /api/comments
-router.route('/').get(getComments).post(createComment);
+router.route('/').get(getComment).post(createComment);
 
 // /api/comment/:commentId
 router
