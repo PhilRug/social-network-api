@@ -3,15 +3,24 @@ const { Schema, model } = require('mongoose');
 // Schema to create User model
 const UserSchema = new Schema(
   {
-    first: String,
-    last: String,
-    age: Number,
-    comments: [
-      {
+    username: {
+      type: String,
+      unique: true,
+      required: [true, "Username is Required"],
+      trim: true
+    },
+    email: {
+      type: String,
+      required: [true, "A Valid email address is Required"],
+      unique: true,
+      match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, "Please enter a valid emal address"]
+    },
+    thoughts: [
+    {
         type: Schema.Types.ObjectId,
-        ref: 'comment',
-      },
-    ],
+        ref: 'Thought'
+    }],
+    friends: [this]
   },
   {
     // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
@@ -23,21 +32,13 @@ const UserSchema = new Schema(
   }
 );
 
-// Create a virtual property `fullName` that gets and sets the user's full name
-UserSchema
-  .virtual('fullName')
-  // Getter
-  .get(function () {
-    return `${this.first} ${this.last}`;
-  })
-  // Setter to set the first and last name
-  .set(function (v) {
-    const first = v.split(' ')[0];
-    const last = v.split(' ')[1];
-    this.set({ first, last });
-  });
+// virtual friendCount - get total count of friends
+UserSchema.virtual('friendCount').get(function() {
+  return this.friends.length;
+});
 
-// Initialize our User model
-const User = model('user', UserSchema);
+// create the User model using the UserSchema
+const User = model('User', UserSchema);
 
+// export the User model
 module.exports = User;
