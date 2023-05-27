@@ -109,13 +109,21 @@ module.exports = {
     }
   },
 
-  async removeCommentResponse(req, res) {
+async removeCommentResponse(req, res) {
     try {
       const comment = await Comment.findOneAndUpdate(
         { _id: req.params.commentId },
         { $pull: { responses: { responseId: req.params.responseId } } },
         { runValidators: true, new: true }
       );
-
+  
       if (!comment) {
         return res.status(404).json({ message: 'No comment with this ID' });
+      }
+  
+      res.json(comment);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
+};
